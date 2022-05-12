@@ -10,6 +10,6 @@ export default function BurgerMenu() {
         <Menu.Item>lorem ipsum</Menu.Item>
         <Menu.Item>lorem ipsum</Menu.Item>
         <Menu.Item>lorem ipsum</Menu.Item>
-        <Menu.Item isDisabled>Logout</Menu.Item>
+        <Menu.Item isDisabled>Выйти</Menu.Item>
     </Menu>
 }

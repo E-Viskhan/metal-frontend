@@ -4,7 +4,7 @@ import BurgerMenu from "./BurgerMenu";
 
 export default function Header() {
     return (
-        <HStack justifyContent='space-between' alignItems='center'>
+        <HStack justifyContent='space-between' alignItems='center' mb={5}>
             <AvatarIcon/>
             <BurgerMenu/>
         </HStack>
