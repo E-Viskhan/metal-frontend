@@ -1,7 +1,7 @@
 import { HamburgerIcon, Menu, Pressable } from "native-base";
 
 export default function BurgerMenu() {
-    return <Menu w="190" trigger={triggerProps => {
+    return <Menu w="140" trigger={triggerProps => {
         return <Pressable accessibilityLabel="More options menu" {...triggerProps}>
             <HamburgerIcon/>
         </Pressable>;
