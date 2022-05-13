@@ -1,14 +1,13 @@
-import { StyleSheet } from "react-native";
-import { View } from "native-base";
+import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import Header from "./Header/Header";
 import MainCards from "./MainCards/MainCards";
 
 export default function Home() {
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Header/>
             <MainCards/>
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -16,6 +15,8 @@ export default function Home() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        padding: 10,
+        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10,
+        backgroundColor: 'white',
     },
 });

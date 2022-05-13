@@ -6,10 +6,10 @@ export default function BurgerMenu() {
             <HamburgerIcon/>
         </Pressable>;
     }}>
-        <Menu.Item>lorem ipsum</Menu.Item>
-        <Menu.Item>lorem ipsum</Menu.Item>
-        <Menu.Item>lorem ipsum</Menu.Item>
-        <Menu.Item>lorem ipsum</Menu.Item>
+        <Menu.Item>Пункт меню</Menu.Item>
+        <Menu.Item>Пункт меню</Menu.Item>
+        <Menu.Item>Пункт меню</Menu.Item>
+        <Menu.Item>Пункт меню</Menu.Item>
         <Menu.Item isDisabled>Выйти</Menu.Item>
     </Menu>
 }

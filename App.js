@@ -2,18 +2,21 @@ import { NativeBaseProvider } from "native-base/src/core/NativeBaseProvider";
 import 'react-native-gesture-handler';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import Home from "./components/Home/Home";
+import BuyOperation from "./components/BuyOperation/BuyOperation";
+import SellOperation from "./components/SellOperation/SellOperation";
+import Balance from "./components/Balance/Balance";
 
 const Stack = createStackNavigator();
 
 const StackNavigation = () => (
     <NavigationContainer>
-        <SafeAreaView style={styles.container}>
-            <Stack.Navigator>
-                <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-            </Stack.Navigator>
-        </SafeAreaView>
+        <Stack.Navigator>
+            <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+            <Stack.Screen name="BuyOperation" component={BuyOperation} options={{ title: 'Покупка' }}/>
+            <Stack.Screen name="SellOperation" component={SellOperation} options={{ title: 'Продажа' }}/>
+            <Stack.Screen name="Balance" component={Balance} options={{ title: 'Баланс' }}/>
+        </Stack.Navigator>
     </NavigationContainer>
 
 );
@@ -25,11 +28,3 @@ export default function App() {
         </NativeBaseProvider>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10
-    },
-});
