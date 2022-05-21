@@ -36,12 +36,17 @@ export default function BuyOperation() {
                     value={formik.values.count}
                     onChangeText={formik.handleChange('count')}
                     onBlur={formik.handleBlur('count')}
-                    placeholder='Введите количество'/>
+                    placeholder='Введите количество'
+                    keyboardType='numeric'
+                    autoFocus
+                />
                 <Input
                     value={formik.values.price}
                     onChangeText={formik.handleChange('price')}
                     onBlur={formik.handleBlur('price')}
-                    placeholder='Цена'/>
+                    placeholder='Цена'
+                    keyboardType='numeric'
+                />
                 <Input
                     value={formik.values.amount}
                     onChangeText={formik.handleChange('amount')}
