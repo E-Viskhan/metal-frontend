@@ -31,7 +31,8 @@ export default function BuyOperation() {
                     value={formik.values.name}
                     onChangeText={formik.handleChange('name')}
                     onBlur={formik.handleBlur('name')}
-                    placeholder='Введите название металла'/>
+                    placeholder='Введите название металла'
+                />
                 <Input
                     value={formik.values.count}
                     onChangeText={formik.handleChange('count')}

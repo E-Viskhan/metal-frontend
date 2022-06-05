@@ -4,7 +4,6 @@ import { useNetInfo } from "@react-native-community/netinfo";
 
 export default function AvatarIcon() {
     const { isInternetReachable } = useNetInfo();
-
     return (
         <TouchableOpacity>
             <Avatar
