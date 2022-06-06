@@ -5,19 +5,14 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const useAuth = () => {
     const [isLogin, setIsLogin] = useState(false);
     const [userId, setUserId] = useState(null);
-    const [accessToken, setAccessToken] = useState(null);
-    const [refreshToken, setRefreshToken] = useState(null);
 
-    const login = async (accessToken, refreshToken, userId) => {
-        if (accessToken && refreshToken && userId) {
+    const login = async (accessToken, userId) => {
+        if (accessToken && userId) {
             await AsyncStorage.multiSet([
                 ['accessToken', accessToken],
-                ['refreshToken', refreshToken],
                 ['userId', userId]
             ]);
 
-            setAccessToken(accessToken);
-            setRefreshToken(refreshToken);
             setUserId(userId);
             setIsLogin(true);
         }
@@ -26,29 +21,23 @@ export const useAuth = () => {
     const logout = async () => {
         const client = useApolloClient();
 
-        await AsyncStorage.multiRemove(['accessToken', 'refreshToken', 'userId']);
+        await AsyncStorage.multiRemove(['accessToken', 'userId']);
         await client.resetStore();
 
-        setAccessToken(null);
-        setRefreshToken(null);
         setUserId(null);
         setIsLogin(false);
     };
 
     const getUserDataFromStorage = async () => {
-        const {
-            accessToken,
-            refreshToken,
-            userId
-        } = await AsyncStorage.multiGet(['accessToken', 'refreshToken', 'userId']);
-        await login(accessToken, refreshToken, userId);
-    }
+        const { accessToken, userId } = await AsyncStorage.multiGet(['accessToken', 'userId']);
+        await login(accessToken, userId);
+    };
 
     useEffect(() => {
         void getUserDataFromStorage();
-    }, [])
+    }, []);
 
-    return { isLogin, logout, login, accessToken, refreshToken, userId };
+    return { isLogin, userId, logout, login };
 };
 
 export const AuthContext = createContext();

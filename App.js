@@ -6,11 +6,11 @@ import { StackNavigation } from "./src/components/StackNavigation";
 import { AuthContext, useAuth } from "./src/auth";
 
 export default function App() {
-    const { userId, refreshToken, accessToken, login, isLogin, logout } = useAuth();
+    const { userId, isLogin, login, logout } = useAuth();
 
     return (
         <ApolloProvider client={client}>
-            <AuthContext.Provider value={{userId, refreshToken, accessToken, login, isLogin, logout}}>
+            <AuthContext.Provider value={{userId, login, isLogin, logout}}>
                 <NativeBaseProvider>
                     <StackNavigation/>
                 </NativeBaseProvider>

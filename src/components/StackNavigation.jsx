@@ -27,9 +27,9 @@ export const StackNavigation = () => {
                     <Stack.Screen name="Settings" component={Settings} options={{ title: 'Настройки' }}/>
                 </Stack.Navigator>
             ) : (
-                <Stack.Navigator>
-                    <Stack.Screen name="Registration" component={Registration} options={{ headerShown: false }}/>
-                    <Stack.Screen name="Login" component={Login} options={{ headerShown: false }}/>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    <Stack.Screen name="Login" component={Login}/>
+                    <Stack.Screen name="Registration" component={Registration}/>
                 </Stack.Navigator>
             )}
         </NavigationContainer>
