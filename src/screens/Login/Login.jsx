@@ -4,21 +4,26 @@ import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../../grapqlql/mutations";
-import { useContext } from "react";
-import { AuthContext } from "../../auth";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../../components/AuthProvider";
 
 const Login = () => {
-    const [loginMutation, { data, loading, error }] = useMutation(LOGIN);
-    const { login } = useContext(AuthContext);
+    const [login, { data: loginData, loading, error }] = useMutation(LOGIN);
+    const { setAuthUser } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (loginData) {
+            const { accessToken, userId } = loginData.login;
+
+            setAuthUser(accessToken, userId);
+        }
+    }, [loginData]);
 
     const initialValues = { email: '', password: '' };
 
     const onSubmit = async ({ email, password }, actions) => {
-        await loginMutation({ variables: { email, password } });
+        await login({ variables: { email, password }});
 
-        const { accessToken, userId } = data.login;
-
-        login(accessToken, userId);
         actions.resetForm();
     };
 

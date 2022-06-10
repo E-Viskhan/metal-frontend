@@ -6,13 +6,13 @@ import BuyOperation from "../screens/BuyOperation/BuyOperation";
 import SellOperation from "../screens/SellOperation/SellOperation";
 import Balance from "../screens/Balance/Balance";
 import Settings from "../screens/Settings/Settings";
-import { AuthContext } from "../auth";
 import Registration from "../screens/Registration/Registration";
 import Login from "../screens/Login/Login";
+import { AuthContext } from "./AuthProvider";
 
 const Stack = createStackNavigator();
 
-export const StackNavigation = () => {
+const StackNavigation = () => {
     const [initialRouteName, setInitialRouteName] = useState('Home'); // it will be in getUserPersonalData with name and other userInfo
     const { isLogin } = useContext(AuthContext);
 
@@ -35,3 +35,5 @@ export const StackNavigation = () => {
         </NavigationContainer>
     )
 };
+
+export default StackNavigation;

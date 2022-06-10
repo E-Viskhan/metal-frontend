@@ -8,3 +8,18 @@ export const LOGIN = gql`
         }
     }
 `;
+
+export const LOGOUT = gql`
+    mutation logout {
+        logout
+    }
+`;
+
+export const REFRESH = gql`
+    mutation refresh {
+        refresh {
+            accessToken
+        }
+    }
+`;
+

@@ -1,20 +1,18 @@
 import { NativeBaseProvider } from "native-base/src/core/NativeBaseProvider";
 import 'react-native-gesture-handler';
 import { ApolloProvider } from "@apollo/client";
-import { client } from "./src/apolloClient";
-import { StackNavigation } from "./src/components/StackNavigation";
-import { AuthContext, useAuth } from "./src/auth";
+import { mainClient } from "./src/apollo";
+import StackNavigation from "./src/components/StackNavigation";
+import AuthProvider from "./src/components/AuthProvider";
 
 export default function App() {
-    const { userId, isLogin, login, logout } = useAuth();
-
     return (
-        <ApolloProvider client={client}>
-            <AuthContext.Provider value={{userId, login, isLogin, logout}}>
+        <ApolloProvider client={mainClient}>
+            <AuthProvider>
                 <NativeBaseProvider>
                     <StackNavigation/>
                 </NativeBaseProvider>
-            </AuthContext.Provider>
+            </AuthProvider>
         </ApolloProvider>
     );
 };
