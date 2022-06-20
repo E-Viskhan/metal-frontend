@@ -1,18 +1,11 @@
-import { Box, Button } from "native-base";
-import { StyleSheet } from "react-native";
-import { useContext } from "react";
-import { NavigationContext } from "@react-navigation/native";
+import { Box } from "native-base";
+import { MyBackButton } from "../../components";
 
-export default function SellOperation() {
-    const { goBack } = useContext(NavigationContext);
+export const SellOperation = () => {
 
     return (
         <Box bg='white' flex={1}>
-            <Button onPress={goBack}>Вернуться на главную</Button>
+            <MyBackButton>Вернуться на главную</MyBackButton>
         </Box>
     );
 };
-
-const styles = StyleSheet.create({
-
-});

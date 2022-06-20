@@ -3,10 +3,13 @@ import { useContext, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGOUT } from "../../../grapqlql/mutations";
 import { AuthContext } from "../../../components/AuthProvider";
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function BurgerMenu() {
     const { removeAuthUser } = useContext(AuthContext);
     const [logout, { data, loading, error }] = useMutation(LOGOUT);
+    const { navigate } = useNavigation()
 
     useEffect(() => {
         if (data) {
@@ -19,10 +22,7 @@ export default function BurgerMenu() {
             <HamburgerIcon/>
         </Pressable>;
     }}>
-        <Menu.Item>Пункт меню</Menu.Item>
-        <Menu.Item>Пункт меню</Menu.Item>
-        <Menu.Item>Пункт меню</Menu.Item>
-        <Menu.Item>Пункт меню</Menu.Item>
+        <Menu.Item onPress={() => navigate('Settings')}>Настройки</Menu.Item>
         <Menu.Item onPress={logout}>Выйти</Menu.Item>
     </Menu>
 }

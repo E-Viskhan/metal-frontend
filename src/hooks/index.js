@@ -1,0 +1,1 @@
+export {useInitApp} from './useInitApp';

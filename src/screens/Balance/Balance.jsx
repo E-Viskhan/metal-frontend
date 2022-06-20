@@ -1,21 +1,11 @@
-import { Box, Button } from "native-base";
-import { StyleSheet } from "react-native";
-import { useContext } from "react";
-import { NavigationContext } from "@react-navigation/native";
-import { useMutation } from "@apollo/client";
-import { LOGIN } from "../../grapqlql/mutations";
+import { Box } from "native-base";
+import { MyBackButton } from "../../components";
 
-export default function Balance() {
-    const { goBack } = useContext(NavigationContext);
-    const {} = useMutation(LOGIN)
+export const Balance = () => {
 
     return (
         <Box bg='white' flex={1}>
-            <Button onPress={goBack}>Вернуться на главную</Button>
+            <MyBackButton>Вернуться на главную</MyBackButton>
         </Box>
     );
 };
-
-const styles = StyleSheet.create({
-
-});

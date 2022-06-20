@@ -1,9 +1,9 @@
 import { Box, Button, Heading, Input, Stack } from "native-base";
-import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
+import { CustomSafeArea } from "../../components";
 
-const Registration = () => {
+export const Registration = () => {
     const initialValues = { email: '', password: '' };
 
     const onSubmit = (values, actions) => {
@@ -19,7 +19,7 @@ const Registration = () => {
     const formik = useFormik({ initialValues, onSubmit, validationSchema });
 
     return (
-        <SafeAreaView style={styles.container}>
+        <CustomSafeArea>
             <Box bg='white' flex={1} p={5}>
                 <Heading textAlign='center' mb={3}>Зарегистрироваться</Heading>
                 <Stack space='3'>
@@ -40,17 +40,6 @@ const Registration = () => {
                     <Button onPress={formik.handleSubmit}>Зарегистрироваться</Button>
                 </Stack>
             </Box>
-        </SafeAreaView>
+        </CustomSafeArea>
     )
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10,
-        backgroundColor: 'white',
-    },
-});
-
-export default Registration;

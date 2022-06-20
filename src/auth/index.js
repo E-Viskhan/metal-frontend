@@ -49,7 +49,7 @@ export const useAuth = () => {
     };
 
     const getUserDataFromStorage = async () => {
-        const { accessToken, userId } = await AsyncStorage.multiGet(['accessToken', 'userId']);
+        const [ [, accessToken], [, userId] ] = await AsyncStorage.multiGet(['accessToken', 'userId']);
         await setAuthUser(accessToken, userId);
     };
 

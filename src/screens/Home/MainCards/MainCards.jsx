@@ -5,7 +5,7 @@ import MinusCard from "./MinusCard";
 
 export default function MainCards() {
     return (
-        <Box flexDirection='row' width='100%' justifyContent='space-between'>
+        <Box flexDirection='row' width='100%' justifyContent='space-between' mb='7'>
             <BalanceCard/>
             <Box w='48%'>
                 <PlusCard/>

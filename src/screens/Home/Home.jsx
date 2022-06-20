@@ -1,22 +1,13 @@
-import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
-import Header from "./Header/Header";
+import { CustomSafeArea, Header } from "../../components";
 import MainCards from "./MainCards/MainCards";
+import LastOperations from "./LastOperations/LastOperations";
 
-export default function Home() {
+export const Home = () => {
     return (
-        <SafeAreaView style={styles.container}>
+        <CustomSafeArea>
             <Header/>
             <MainCards/>
-        </SafeAreaView>
+            <LastOperations/>
+        </CustomSafeArea>
     );
 };
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10,
-        backgroundColor: 'white',
-    },
-});

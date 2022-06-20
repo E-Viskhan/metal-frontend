@@ -1,4 +1,5 @@
 import { gql } from "@apollo/client";
+import { TransactionFragment } from "./fragments";
 
 export const LOGIN = gql`
     mutation login ($email: String!, $password: String!) {
@@ -23,3 +24,11 @@ export const REFRESH = gql`
     }
 `;
 
+export const ADD_TRANSACTION = gql`
+    ${TransactionFragment}
+    mutation addTransaction($operationType: String!, $articleId: Int!, $count: Float!, $price: Float!, $amount: Float!) {
+        addTransaction(operationType: $operationType, articleId: $articleId, count: $count, price: $price, amount: $amount) {
+            ...TransactionFragment
+        }
+    }
+`;

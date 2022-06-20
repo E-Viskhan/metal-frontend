@@ -1,13 +1,13 @@
 import { Box, Button, Heading, Input, Stack } from "native-base";
-import { Platform, SafeAreaView, StatusBar, StyleSheet } from "react-native";
 import { useFormik } from "formik";
 import * as Yup from 'yup';
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../../grapqlql/mutations";
 import { useContext, useEffect } from "react";
 import { AuthContext } from "../../components/AuthProvider";
+import { CustomSafeArea } from "../../components";
 
-const Login = () => {
+export const Login = () => {
     const [login, { data: loginData, loading, error }] = useMutation(LOGIN);
     const { setAuthUser } = useContext(AuthContext);
 
@@ -22,7 +22,7 @@ const Login = () => {
     const initialValues = { email: '', password: '' };
 
     const onSubmit = async ({ email, password }, actions) => {
-        await login({ variables: { email, password }});
+        await login({ variables: { email, password } });
 
         actions.resetForm();
     };
@@ -35,7 +35,7 @@ const Login = () => {
     const formik = useFormik({ initialValues, onSubmit, validationSchema });
 
     return (
-        <SafeAreaView style={styles.container}>
+        <CustomSafeArea>
             <Box bg='white' flex={1} p={5}>
                 <Heading textAlign='center' mb={3}>Войти в систему</Heading>
                 <Stack space='3'>
@@ -56,17 +56,6 @@ const Login = () => {
                     <Button onPress={formik.handleSubmit}>Войти</Button>
                 </Stack>
             </Box>
-        </SafeAreaView>
+        </CustomSafeArea>
     )
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 10,
-        paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight + 10 : 10,
-        backgroundColor: 'white',
-    },
-});
-
-export default Login;

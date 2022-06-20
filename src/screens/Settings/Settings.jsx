@@ -1,4 +1,4 @@
-export default function Settings() {
+export const Settings = () => {
     return (
         <></>
     );
