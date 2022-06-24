@@ -1,91 +1,155 @@
-import { Box, Button, CheckIcon, Input, Select, Stack } from "native-base";
+import { Box, Button, CheckIcon, Input, InputGroup, Select, Stack, Text, useToast } from "native-base";
 import * as Yup from 'yup';
-import { FormikProvider, useFormik } from "formik";
-import { useApolloClient, useMutation } from "@apollo/client";
-import { GET_ARTICLES } from "../../grapqlql/queries";
-import { AmountInput } from "./AmountInput";
-import { MAIN_ARTICLE_ID } from "../../constants";
+import { useFormik } from "formik";
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_ARTICLES, GET_TRANSACTIONS } from "../../grapqlql/queries";
 import { ADD_TRANSACTION } from "../../grapqlql/mutations";
-import { MyBackButton } from "../../components";
+import { MAIN_ARTICLE_ID } from "../../constants";
 
 export const BuyOperation = () => {
-    const client = useApolloClient();
-    const { articles } = client.readQuery({ query: GET_ARTICLES });
-    const [addTransaction, { data, loading, error }] = useMutation(ADD_TRANSACTION);
+    const { data: { articles } } = useQuery(GET_ARTICLES);
+    // TODO: Изменить refetching на изменение кэша, чтобы не делать лишний запрос данных.
+    const [addTransaction, { data, loading, error }] = useMutation(ADD_TRANSACTION, {
+        refetchQueries: [
+            { query: GET_TRANSACTIONS, variables: { take: 2, orderBy: { id: 'desc' } } }
+        ]
+    });
+    const toast = useToast();
 
-    const mainArticlePrice = articles.find(article => article.id === MAIN_ARTICLE_ID).price.toString();
+    const getArticlePrice = articleId => articles.find(article => article.id === articleId).price;
+    const clearStr = str => str.replace(',', '.').replace('-', '').replace(' ', '') || 0;
+    const getAmount = (count, price) => Math.ceil(parseFloat(count) * parseFloat(price));
 
     const initialValues = {
         articleId: MAIN_ARTICLE_ID,
         count: '',
-        price: mainArticlePrice,
-        amount: '0'
+        price: getArticlePrice(MAIN_ARTICLE_ID),
+        amount: ''
     };
 
     const onSubmit = async (values, actions) => {
         console.log(values);
+        let formData = {};
+
+        for (let item in values) {
+            formData[item] = parseFloat(values[item]);
+        }
+
+        await addTransaction({
+            variables: {
+                operationType: "PURCHASE",
+                ...formData,
+            },
+            update: (cache, { data: { addTransaction } }) => {
+                // console.log(cache)
+                // const data = cache.readQuery({ query: GET_TRANSACTIONS });
+                // console.log(data);
+                // data.items = [...data.items, addItem];
+                // cache.writeQuery({ query: GET_ITEMS }, data);
+            }
+        });
+
+        toast.show({
+            title: "Операция успешно добавлена",
+            placement: "top",
+            duration: 1000
+        })
+
         actions.resetForm();
     };
 
     const validationSchema = Yup.object({
-        articleId: Yup.string().required('Это поле обязательно'),
-        count: Yup.string().required('Это поле обязательно'),
-        price: Yup.string().required('Это поле обязательно'),
-        amount: Yup.string().required('Это поле обязательно')
+        articleId: Yup.number().required('Это поле обязательно'),
+        count: Yup.number().required('Это поле обязательно'),
+        price: Yup.number().required('Это поле обязательно'),
+        amount: Yup.number().required('Это поле обязательно')
     });
 
     const formik = useFormik({ initialValues, onSubmit, validationSchema });
 
     const handleSelectChange = articleId => {
-        const article = articles.find(article => article.id === articleId);
+        const price = getArticlePrice(articleId);
+        const count = formik.values.count;
+        const amount = getAmount(count, price);
+
+        formik.setValues({
+            articleId,
+            price,
+            count,
+            amount
+        }, false);
+    };
+
+    const handleCountChange = inputValue => {
+        const count = clearStr(inputValue);
+        const price = formik.values.price;
+        const amount = getAmount(count, price);
 
         formik.setValues({
             ...formik.values,
-            articleId,
-            price: article.price.toString()
-        });
+            count,
+            amount
+        }, false);
+    };
 
-    }
+
+    const handlePriceChange = inputValue => {
+        const price = clearStr(inputValue);
+        const count = formik.values.count;
+        const amount = getAmount(count, price);
+
+        formik.setValues({
+            ...formik.values,
+            price,
+            amount
+        }, false);
+    };
 
     return (
         <Box bg='white' flex={1} p={5}>
-            <FormikProvider value={formik}>
-                <Stack space='3'>
+            <Stack space='3'>
+                <InputGroup flexDirection='column'>
+                    <Text mb='2' bold>Вид металла</Text>
                     <Select
                         selectedValue={formik.values.articleId}
-                        minWidth="200"
                         placeholder="Выберите тип металла"
                         _selectedItem={{ bg: "#ebe5e3", endIcon: <CheckIcon size="7"/> }}
                         onValueChange={handleSelectChange}
                     >
                         {articles?.map(({ id, name }) => <Select.Item key={id} label={name} value={id}/>)}
                     </Select>
+                </InputGroup>
+                <InputGroup flexDirection='column'>
+                    <Text mb='2' bold>Количество</Text>
                     <Input
-                        value={formik.values.count}
-                        onChangeText={formik.handleChange('count')}
-                        onBlur={formik.handleBlur('count')}
+                        value={formik.values.count ? formik.values.count.toString() : ''}
+                        onChangeText={handleCountChange}
                         placeholder='Введите количество'
                         keyboardType='numeric'
                         autoFocus
                     />
+                </InputGroup>
+                <InputGroup flexDirection='column'>
+                    <Text mb='2' bold>Цена</Text>
                     <Input
-                        value={formik.values.price}
-                        onChangeText={formik.handleChange('price')}
-                        onBlur={formik.handleBlur('price')}
+                        value={formik.values.price ? formik.values.price.toString() : ''}
+                        onChangeText={handlePriceChange}
                         placeholder='Цена'
                         keyboardType='numeric'
                     />
-                    <AmountInput
-                        value={formik.values.amount}
-                        onChangeText={formik.handleChange('amount')}
-                        onBlur={formik.handleBlur('amount')}
+                </InputGroup>
+                <InputGroup flexDirection='column'>
+                    <Text mb='2' bold>Сумма</Text>
+                    <Input
+                        value={formik.values.amount ? formik.values.amount.toString() : ''}
+                        editable={false}
                         placeholder='Сумма'
                         keyboardType='numeric'
                     />
-                    <Button onPress={formik.handleSubmit}>Добавить операцию</Button>
-                    <MyBackButton>Вернуться на главную</MyBackButton>
-                </Stack>
-            </FormikProvider>
+                </InputGroup>
+                <Button onPress={formik.handleSubmit}>Добавить операцию</Button>
+                {/*<MyBackButton>Вернуться на главную</MyBackButton>*/}
+            </Stack>
         </Box>
     );
 };

@@ -1,13 +1,13 @@
 import { Box, Column, Heading, Row, Text } from "native-base";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_TRANSACTIONS } from "../../../grapqlql/queries";
+import { GET_TRANSACTIONS } from "../../../grapqlql/queries";
 
 const LastOperations = () => {
-    const { data, loading, error } = useQuery(GET_ALL_TRANSACTIONS);
+    const { data, loading, error } = useQuery(GET_TRANSACTIONS, {
+        variables: { take: 2, orderBy: { id: 'desc' } }
+    });
 
     if (loading || error) return <></>;
-
-    const operations = data.transactions.slice(-2);
 
     return (
         <Column>
@@ -15,7 +15,7 @@ const LastOperations = () => {
                 <Heading size='md'>Транзакции</Heading>
                 <Text bold fontSize='md' color='gray.500'>Все</Text>
             </Row>
-            {operations.map(({ id, operationType, articleName, amount, updatedAt, count }) => {
+            {data.transactions.map(({ id, operationType, articleName, amount, updatedAt, count }) => {
                 const sign = operationType === 'PURCHASE' ? '-' : '+';
                 const date = new Date(+updatedAt).toLocaleString();
 
